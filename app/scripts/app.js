@@ -65,15 +65,13 @@ Instructions:
     Your code goes here!
      */
     getJSON('../data/earth-like-results.json')
-      .then(function(planetData) {
-        addSearchHeader(planetData.query)
-        console.log(planetData)
-        return planetData
+      .then(function(response) {
+        addSearchHeader(response.query)
+        console.log(response)
+        return response.results.map(getJSON)
       })
-      .then(function(data) {
-        console.log(data)
-        createPlanetThumb(data)
-      })
+      .then(promises => Promise.all(promises))
+      .then(jsonPromises => jsonPromises.forEach(createPlanetThumb))
       .catch(function(e) {
         addSearchHeader('error')
         console.log(Error(e))
